@@ -43,13 +43,25 @@ def normalize(wavefunction):
 psi = normalize(psi_1 + psi_2)
 
 # Time evolution operator
-def time_evolver(wavefunction, K, V, timestep):
+# I order Trotter's splitting
+def time_evolver_1st_order(wavefunction, K, V, timestep):
     wavefunction_p = np.fft.fft(wavefunction)
-    wavefunction_p = wavefunction_p * np.exp(-1j*timestep*K)
+    wavefunction_p = wavefunction_p * np.exp(-1j*K*timestep)
     wavefunction_x = np.fft.ifft(wavefunction_p)
     wavefunction_x = wavefunction_x * np.exp(-1j*V*timestep)
 
     return wavefunction_x
+
+# II order Trotter's splitting
+def time_evolver(wavefunction, K, V, timestep):
+    wavefunction_x = wavefunction * np.exp(-0.5j*V*timestep)
+    wavefunction_p = np.fft.fft(wavefunction_x)
+    wavefunction_p = wavefunction_p * np.exp(-1j*K*timestep)
+    wavefunction_x = np.fft.ifft(wavefunction_p)
+    wavefunction_x = wavefunction_x * np.exp(-0.5j*V*timestep)
+
+    return wavefunction_x
+
 
 dt = 0.001
 
