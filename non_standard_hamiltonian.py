@@ -35,7 +35,7 @@ class Simulation:
         dk: The k space step size
     """
 
-    def __init__(self, N=100, bounds=[-5.0, 5.0], exp=2):
+    def __init__(self, N=128, bounds=[-5.0, 5.0], exp=2):
         """
         Initialize a Simulation.
 
@@ -170,7 +170,7 @@ tolerance = 1e-3
 eigvalues = np.linalg.eigvalsh(Simulation(N=10, exp=exponent).H)[:10]
 
 print("Looking for convergence N with tolerance t = %.1e" % tolerance)
-for n in range(11, 100):
+for n in range(11, 500):
     sim = Simulation(N=n, exp=exponent)
     new_eigvalues = np.linalg.eigvalsh(sim.H)[:10]
     error = np.abs(new_eigvalues - eigvalues)
@@ -188,7 +188,7 @@ print('''
 ~ Plot the probability density for the first two eigenvectors.                 ~                                                        ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ''')
-n = max(n, 256)  # set minimum value of N to 100 so we get a decent smoothness
+n = max(n, 256)  # set minimum value of N to 256 so we get a decent smoothness
 print("Plotting eigenstates with N = %i" % n)
 print("(close the plot to continue)")
 sim = Simulation(N=n, exp=exponent)
